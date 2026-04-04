@@ -1,14 +1,42 @@
 "use strict";
 
+const tasks = [];
+
 // const taskKanban = {
 //   text: text,
 //   id: id,
+//   column: column,
 // };
 
+let input = document.getElementById("taskInput");
+let addButton = document.getElementById("addTaskBtn");
+
+let columnTodo = document.getElementById("todoList");
+let columnInProgress = document.getElementById("progressList");
+let columnDone = document.getElementById("doneList");
+
+function renderTask(renderColumn) {
+  columnTodo.innerHTML = "";
+  columnInProgress.innerHTML = "";
+  columnDone.innerHTML = "";
+
+  for (let i = 0; i < tasks.length; i++) {
+    let textCard = createTask(tasks[i].text, onDelete);
+
+    if (tasks[i].column === "todo") {
+      columnTodo.appendChild(textCard);
+    } else if (tasks[i].column === "progress") {
+      columnInProgress.appendChild(textCard);
+    } else if (tasks[i].column === "done") {
+      columnDone.appendChild(textCard);
+    }
+  }
+}
+
 function createTask(taskText, onDelete) {
-  const createClickTask = document.createElement("li");
-  createClickTask.classList.add("task");
-  createClickTask.innerHTML = `
+  let createElementTask = document.createElement("li");
+  createElementTask.classList.add("task");
+  createElementTask.innerHTML = `
   <p class="task-text">${taskText}</p>
 
   <div class="task-buttons">
@@ -16,27 +44,31 @@ function createTask(taskText, onDelete) {
     <button class="delete">✕</button>
   </div>`;
 
-  let deleteTask = createClickTask.querySelector(".delete");
+  let deleteTask = createElementTask.querySelector(".delete");
 
   deleteTask.addEventListener("click", () => {
-    onDelete(createClickTask);
+    onDelete(createElementTask);
   });
-
-  return createClickTask;
+  return createElementTask;
 }
 
 function onDelete(elementDelete) {
   elementDelete.remove();
 }
 
-let input = document.getElementById("taskInput");
-let addButton = document.getElementById("addTaskBtn");
-let columnTodo = document.getElementById("todoList");
-
 addButton.addEventListener("click", () => {
+  let trimmedText = input.value.trim();
+  if (trimmedText === "") {
+    return alert("Ведите текст");
+  }
   let taskText = input.value;
-  let newTask = createTask(taskText, onDelete);
-  columnTodo.append(newTask);
+  const taskKanban = {
+    id: Date.now(),
+    text: trimmedText,
+    column: "todo",
+  };
+  tasks.push(taskKanban);
+  renderTask();
   input.value = "";
 });
 
