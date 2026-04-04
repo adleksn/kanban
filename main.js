@@ -15,14 +15,23 @@ function createTask(taskText, onDelete) {
     <button class="move">→</button>
     <button class="delete">✕</button>
   </div>`;
+
+  let deleteTask = createClickTask.querySelector(".delete");
+
+  deleteTask.addEventListener("click", () => {
+    onDelete(createClickTask);
+  });
+
   return createClickTask;
+}
+
+function onDelete(elementDelete) {
+  elementDelete.remove();
 }
 
 let input = document.getElementById("taskInput");
 let addButton = document.getElementById("addTaskBtn");
 let columnTodo = document.getElementById("todoList");
-
-function onDelete(taskId) {}
 
 addButton.addEventListener("click", () => {
   let taskText = input.value;
@@ -33,8 +42,8 @@ addButton.addEventListener("click", () => {
 
 /* 
 Задачи:
-1. Сделать добавление задачи в Todo 
-2. Сделать удалениие задачи
+1. Сделать добавление задачи в Todo (Готово)
+2. Сделать удалениие задачи (Готово)
 3. Сделать перемещение задачи
 4. Сделать сохранение задачи в localStorage
 5. Сделать Drag and Drop
