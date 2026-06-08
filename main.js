@@ -1,12 +1,6 @@
 "use strict";
 
-const tasks = [];
-
-// const taskKanban = {
-//   text: text,
-//   id: id,
-//   column: column,
-// };
+let tasks = [];
 
 let input = document.getElementById("taskInput");
 let addButton = document.getElementById("addTaskBtn");
@@ -21,7 +15,7 @@ function renderTask(renderColumn) {
   columnDone.innerHTML = "";
 
   for (let i = 0; i < tasks.length; i++) {
-    let textCard = createTask(tasks[i].text, onDelete);
+    let textCard = createTask(tasks[i].text, tasks[i].id, onDelete);
 
     if (tasks[i].column === "todo") {
       columnTodo.appendChild(textCard);
@@ -33,7 +27,7 @@ function renderTask(renderColumn) {
   }
 }
 
-function createTask(taskText, onDelete) {
+function createTask(taskText, taskId, onDelete) {
   let createElementTask = document.createElement("li");
   createElementTask.classList.add("task");
   createElementTask.innerHTML = `
@@ -47,13 +41,17 @@ function createTask(taskText, onDelete) {
   let deleteTask = createElementTask.querySelector(".delete");
 
   deleteTask.addEventListener("click", () => {
-    onDelete(createElementTask);
+    onDelete(taskId);
   });
   return createElementTask;
 }
 
-function onDelete(elementDelete) {
-  elementDelete.remove();
+function onDelete(id) {
+  let onFilterId = tasks.filter((filterId) => {
+    return filterId.id !== id;
+  });
+  tasks = onFilterId;
+  renderTask();
 }
 
 addButton.addEventListener("click", () => {
@@ -82,12 +80,12 @@ addButton.addEventListener("click", () => {
 
 
 
-Превый пункт
+Превый пункт (Готово)
 1. Создать объект с id и text 
 2. создаю function которая при клике создает div элемент с input внутри 
 3. создаю function которая не дает создать задачу без текста 
 
-Второй пункт
+Второй пункт (Готово)
 1. Создаю function которая удаляет div при клике
 
 Третий пункт
